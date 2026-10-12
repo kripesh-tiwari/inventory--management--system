@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>{% block title %}InventoryPro{% endblock %}</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+
+
+</head>
+
+<body>
+    <div class="app-layout">
+
+
+    <aside class="sidebar">
+        <a href="{{ url_for('index') }}" class="brand">
+            <span class="brand-icon">I</span>
+            <span>Inventory<span class="brand-light">Pro</span></span>
+        </a>
+
+        <p class="nav-label">WORKSPACE</p>
+
+        <nav class="navigation">
+            <a href="{{ url_for('index') }}"
+               class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+                <span class="nav-icon">▦</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('view_products') }}"
+               class="nav-link {% if request.endpoint in ['view_products', 'add_product', 'edit_product'] %}active{% endif %}">
+                <span class="nav-icon">□</span>
+                Products
+            </a>
+
+            <a href="{{ url_for('add_product') }}" class="nav-link">
+                <span class="nav-icon">＋</span>
+                Add Product
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="profile-avatar">A</div>
+            <div>
+                <strong>Administrator</strong>
+                <small>Inventory Manager</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">INVENTORY MANAGEMENT</p>
+                <h1>{% block page_heading %}Dashboard{% endblock %}</h1>
+            </div>
+
+            <a href="{{ url_for('add_product') }}" class="button button-primary">
+                + Add Product
+            </a>
+        </header>
+
+        <section class="page-content">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+
+        </section>
+
+        <footer class="footer">
+            InventoryPro &middot; Inventory Management System
+        </footer>
+    </main>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | InventoryPro{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Welcome Banner -->
+<div class="welcome-banner">
+    <div>
+        <p class="welcome-label">OVERVIEW</p>
+        <h2>Your inventory, at a glance.</h2>
+        <p>Monitor products, stock levels and inventory value from one place.</p>
+    </div>
+
+    <div class="welcome-symbol">▦</div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="stats-grid">
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Total Products</span>
+            <span class="stat-icon icon-purple">□</span>
+        </div>
+        <h2>{{ total_products }}</h2>
+        <p class="stat-description">Unique products in inventory</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Total Units</span>
+            <span class="stat-icon icon-blue">▤</span>
+        </div>
+        <h2>{{ total_units }}</h2>
+        <p class="stat-description">Units currently in stock</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Inventory Value</span>
+            <span class="stat-icon icon-green">₹</span>
+        </div>
+        <h2>₹{{ "%.2f"|format(total_value) }}</h2>
+        <p class="stat-description">Estimated value of current stock</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-top">
+            <span class="stat-label">Low Stock</span>
+            <span class="stat-icon icon-orange">!</span>
+        </div>
+        <h2>{{ low_stock }}</h2>
+        <p class="stat-description">Products at or below their threshold</p>
+    </div>
+
+</div>
+
+<!-- Recently Added Products -->
+<section class="panel">
+
+    <div class="panel-header">
+        <div>
+            <h3>Recently Added Products</h3>
+            <p>Your latest inventory additions</p>
+        </div>
+
+        <a href="{{ url_for('view_products') }}" class="text-link">
+            View all →
+        </a>
+    </div>
+
+    {% if recent_products %}
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>PRODUCT</th>
+                    <th>CATEGORY</th>
+                    <th>PRICE</th>
+                    <th>QUANTITY</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for product in recent_products %}
+                <tr>
+                    <td>
+                        <div class="product-name">
+                            <span class="product-avatar">
+                                {{ product.name[0]|upper }}
+                            </span>
+
+                            <div>
+                                <strong>{{ product.name }}</strong>
+                                <small>SKU-{{ "%04d"|format(product.id) }}</small>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>{{ product.category }}</td>
+
+                    <td>₹{{ "%.2f"|format(product.price) }}</td>
+
+                    <td>{{ product.quantity }}</td>
+
+                    <td>
+                        {% if product.quantity == 0 %}
+                            <span class="badge badge-danger">
+                                Out of stock
+                            </span>
+                        {% elif product.quantity <= product.threshold %}
+                            <span class="badge badge-warning">
+                                Low stock
+                            </span>
+                        {% else %}
+                            <span class="badge badge-success">
+                                In stock
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <div class="empty-state">
+        <div class="empty-icon">□</div>
+        <h3>No products yet</h3>
+        <p>Add your first product to start managing your inventory.</p>
+
+        <a href="{{ url_for('add_product') }}" class="button button-primary">
+            Add your first product
+        </a>
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

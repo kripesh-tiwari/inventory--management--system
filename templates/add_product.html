@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Product | Inventory Management</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Add New Product</h1>
+        <p>Enter the details below to add a product to your inventory.</p>
+
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        
+        <form method="POST" action="{{ url_for('add_product') }}">
+
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter product name"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input
+                    type="text"
+                    id="category"
+                    name="category"
+                    placeholder="e.g. Electronics, Clothing"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price (₹)</label>
+                <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    placeholder="Enter price"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    placeholder="Enter quantity"
+                    min="0"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="threshold">Low Stock Threshold</label>
+                <input
+                    type="number"
+                    id="threshold"
+                    name="threshold"
+                    placeholder="Default: 5"
+                    value="5"
+                    min="0"
+                    required
+                >
+            </div>
+
+            <button type="submit">Add Product</button>
+
+        </form>
+
+        <div class="navigation">
+            <a href="{{ url_for('view_products') }}">View Products</a>
+            <a href="{{ url_for('index') }}">Back to Dashboard</a>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
